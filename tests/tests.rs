@@ -34,7 +34,7 @@ fn test_slow_computation() {
 #[test]
 fn test_cpu_limiter_normal() {
     let mut cpu_limiter = CpuLimiter::new(Duration::from_millis(100), Duration::from_millis(10));
-    cpu_limiter.change_usage(Usage::Normal);
+    cpu_limiter.usage = Usage::Normal;
     let now = Instant::now();
     for i in 0..100 {
         println!("normal_time: {i}");

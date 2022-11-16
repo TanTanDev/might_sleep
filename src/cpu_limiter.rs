@@ -4,7 +4,7 @@ use crate::usage::Usage;
 
 /// lowers cpu usage by sleeping, if the execution is slow, no sleeping occurs.
 pub struct CpuLimiter {
-    usage: Usage,
+    pub usage: Usage,
     min_idle_duration: Duration,
     min_normal_duration: Duration,
     last_time: Instant,
@@ -19,11 +19,6 @@ impl CpuLimiter {
             min_normal_duration,
             last_time: Instant::now(),
         }
-    }
-
-    /// set the usage mode, for either increasing or decreasing target frame time  
-    pub fn change_usage(&mut self, usage: Usage) {
-        self.usage = usage;
     }
 
     /// try to estimate the time to sleep to reach the target framerate based on the usage
