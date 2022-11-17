@@ -1,13 +1,15 @@
-use std::time::Duration;
-
 use might_sleep::prelude::*;
+
+mod usage {
+    use std::time::Duration;
+
+    pub const LOW: Duration = Duration::from_millis(100);
+    pub const NORMAL: Duration = Duration::from_millis(30);
+}
 
 // flips the usage every 10 ticks, showing the target frame rate changing
 fn main() {
-    let mut cpu_limiter = CpuLimiter::new(
-        Duration::from_millis(100), // used in Usage::Low
-        Duration::from_millis(30),  // used in Usage::Normal
-    );
+    let mut cpu_limiter = CpuLimiter::new(usage::LOW);
 
     let mut i = 0;
     loop {
@@ -21,10 +23,10 @@ fn main() {
 }
 
 fn toggle_usage(cpu_limiter: &mut CpuLimiter) {
-    let opposite_usage = match cpu_limiter.usage {
-        Usage::Low => Usage::Normal,
-        Usage::Normal => Usage::Low,
+    let opposite_usage = match cpu_limiter.duration {
+        usage::LOW => usage::NORMAL,
+        _ => usage::LOW,
     };
     println!("set usage to: {:?}", opposite_usage);
-    cpu_limiter.usage = opposite_usage;
+    cpu_limiter.duration = opposite_usage;
 }

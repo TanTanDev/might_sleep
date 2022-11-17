@@ -1,6 +1,13 @@
 use std::time::{Duration, Instant};
 
-use might_sleep::{cpu_limiter::CpuLimiter, usage::Usage};
+use might_sleep::cpu_limiter::CpuLimiter;
+
+mod usage {
+    use std::time::Duration;
+
+    pub const LOW: Duration = Duration::from_millis(100);
+    pub const NORMAL: Duration = Duration::from_millis(10);
+}
 
 // 10 ms error is okay for our tests
 fn fuzzy_eq(a: f32, b: f32) -> bool {
@@ -9,7 +16,7 @@ fn fuzzy_eq(a: f32, b: f32) -> bool {
 
 #[test]
 fn test_cpu_limiter_idle() {
-    let mut cpu_limiter = CpuLimiter::new(Duration::from_millis(100), Duration::from_millis(10));
+    let mut cpu_limiter = CpuLimiter::new(usage::LOW);
     let now = Instant::now();
     for i in 0..100 {
         println!("idle_time: {i}");
@@ -21,7 +28,7 @@ fn test_cpu_limiter_idle() {
 #[test]
 // this test checks that the cpu_limiter DOES NOT sleep if the computation time is slow
 fn test_slow_computation() {
-    let mut cpu_limiter = CpuLimiter::new(Duration::from_millis(100), Duration::from_millis(10));
+    let mut cpu_limiter = CpuLimiter::new(usage::LOW);
     let now = Instant::now();
     for i in 0..10 {
         println!("slow_computation: {i}");
@@ -33,8 +40,8 @@ fn test_slow_computation() {
 
 #[test]
 fn test_cpu_limiter_normal() {
-    let mut cpu_limiter = CpuLimiter::new(Duration::from_millis(100), Duration::from_millis(10));
-    cpu_limiter.usage = Usage::Normal;
+    let mut cpu_limiter = CpuLimiter::new(usage::LOW);
+    cpu_limiter.duration = usage::NORMAL;
     let now = Instant::now();
     for i in 0..100 {
         println!("normal_time: {i}");

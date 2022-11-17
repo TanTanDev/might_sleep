@@ -6,17 +6,22 @@ The library will internally estimate the time we need to sleep to reach the targ
 
 example code:
 ```rs
-let mut cpu_limiter = CpuLimiter::new(
-  Duration::from_millis(100), // used in Usage::Low
-  Duration::from_millis(10)   // used in Usage::Normal
-);
+mod usage {
+    use std::time::Duration;
 
-// will now target 10 ms between frames
-cpu_limiter.change_usage(Usage::Normal);
-loop {
-    cpu_limiter.might_sleep();
+    pub const LOW: Duration = Duration::from_millis(100);
+    pub const NORMAL: Duration = Duration::from_millis(50);
 }
 
+fn main() {
+    let mut cpu_limiter = CpuLimiter::new(usage::LOW);
+
+    cpu_limiter.duration = usage::NORMAL; // usage is now normal (50ms delay)
+    loop {
+        println!("should be called every 50 ms");
+        cpu_limiter.might_sleep();
+    }
+}
 ```
 
 ## License
