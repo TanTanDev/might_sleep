@@ -1,14 +1,16 @@
-use std::time::Duration;
-
 use might_sleep::prelude::*;
 
-fn main() {
-    let mut cpu_limiter = CpuLimiter::new(
-        Duration::from_millis(100), // used in Usage::Low
-        Duration::from_millis(50),  // used in Usage::Normal
-    );
+mod usage {
+    use std::time::Duration;
 
-    cpu_limiter.usage = Usage::Normal;
+    pub const LOW: Duration = Duration::from_millis(100);
+    pub const NORMAL: Duration = Duration::from_millis(50);
+}
+
+fn main() {
+    let mut cpu_limiter = CpuLimiter::new(usage::LOW);
+
+    cpu_limiter.duration = usage::NORMAL;
     loop {
         println!("should be called every 50 ms");
         cpu_limiter.might_sleep();
