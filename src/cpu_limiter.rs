@@ -29,7 +29,7 @@ impl CpuLimiter {
     }
 
     /// Try to estimate the time to sleep to reach the target framerate based on the current Duration
-    /// Will not sleep if the last proccessing time was slower th
+    /// Will not sleep if the last proccessing time surpasses the current Duration
     pub fn might_sleep(&mut self) {
         let last_loop_time = self.last_time.elapsed();
 
@@ -42,7 +42,7 @@ impl CpuLimiter {
     }
 
     /// Try to estimate the time to sleep to reach the target framerate based on the current Duration
-    /// Will not sleep if the last proccessing time was slower th
+    /// Will not sleep if the last proccessing time surpasses the current Duration
     ///
     /// Returns the time it slept
     pub fn might_sleep_get(&mut self) -> Duration {
